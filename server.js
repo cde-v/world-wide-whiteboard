@@ -14,36 +14,33 @@ server.on('request', app);
 
 // console.log("2: ", server);
 
-server.listen(1337, function () {
-    console.log('The server is listening on port 1337!');
+server.listen(1337, function() {
+  console.log('The server is listening on port 1337!');
 });
 
 // console.log("3: ", server);
 
 var io = socketio(server);
 
-io.on('connection', function (socket) {
-    /* This function receives the newly connected socket.
-       This function will be called for EACH browser that connects to our server. */
-    console.log('A new client has connected!');
-    // console.log("socket", socket);
-    console.log(socket.id);
-    
-
-  socket.on('drawing', function(payload){
-    console.log("server side payload: ",  payload);
-    socket.broadcast.emit('drawingg', payload);
+io.on('connection', function(socket) {
+  /* This function receives the newly connected socket.
+     This function will be called for EACH browser that connects to our server. */
+  console.log('A new client has connected!', socket.id);
+  // console.log("socket", socket);
+  socket.on('drawing', function(payload) {
+    console.log("server side payload: ", payload);
+    socket.broadcast.emit('drawingg', payload.start, payload.end, payload.color);
   });
 
-    socket.on('disconnect', function () {
-        console.log('A client has disconnected! ', socket.id);
-    });
+  socket.on('disconnect', function() {
+    console.log('A client has disconnected! ', socket.id);
+  });
 });
 
 
 
 app.use(express.static(path.join(__dirname, 'browser')));
 
-app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, 'index.html'));
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
