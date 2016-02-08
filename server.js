@@ -26,17 +26,20 @@ io.on('connection', function (socket) {
     /* This function receives the newly connected socket.
        This function will be called for EACH browser that connects to our server. */
     console.log('A new client has connected!');
+    // console.log("socket", socket);
     console.log(socket.id);
+    
 
-    socket.on('drawing', function(payload){
-      console.log(payload);
-      socket.broadcast.emit('drawingg', payload);
-    });
+  socket.on('drawing', function(payload){
+    console.log("server side payload: ",  payload);
+    socket.broadcast.emit('drawingg', payload);
+  });
 
     socket.on('disconnect', function () {
         console.log('A client has disconnected! ', socket.id);
     });
 });
+
 
 
 app.use(express.static(path.join(__dirname, 'browser')));
